@@ -1,23 +1,26 @@
-from psycopg2 import pool
+import mysql.connector
+from mysql.connector import pooling
 import json
 
 class ConexionDB:
-    def __init__(self,min_conection,max_conection,**config):
-        self.conection_pool = pool.SimpleConnectionPool(
-            minconn=min_conection,
-            maxconn=max_conection,
-            **config)
+    def __init__(self,**config):
+        self.conection_pool = pooling.MySQLConnectionPool(
+            pool_name=config['POOL_NAME'],
+            pool_size=config['POOL_SIZE'],
+            pool_reset_session=True,
+            host=config['HOST'],
+            user=config['USER'],
+            password=config['PASSWORD'],
+            database=config['DATABASE'],
+            port=config['PORT']
+        )
     def get_connection(self):
-        return self.conection_pool.getconn()
-    def return_connection(self,conection):
-        self.conection_pool.putconn(conection)
-    def close_pool(self):
-        self.conection_pool.closeall()
+        return self.conection_pool.get_connection()
 
 def init():
     try:
         with open("config.json","r") as f:
             config = json.load(f)
-            return ConexionDB(**config)
+            return ConexionDB(**config['DB_CONFIG'])
     except Exception as e:
         print(e)
