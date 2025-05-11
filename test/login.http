@@ -4,3 +4,7 @@ content-type: application/json
 {
     "id":1
 }
+
+### listar usuarios
+
+GET http://192.168.1.9:4001/usuario/getUsuarios HTTP/1.1
