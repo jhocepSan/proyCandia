@@ -4,7 +4,7 @@ class ApiTelegram:
     def __init__(self):
         self.url = 'https://api.telegram.org/bot{token}/sendMessage'
         with open("./config/config.json","r") as f:
-            conf = json.load(f.read())
+            conf = json.load(f)
         self.token = conf["KEY_TELEGRAM"]
     def sendMessage(self,message):
         try:

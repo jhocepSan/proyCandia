@@ -19,8 +19,9 @@ class ConexionDB:
 
 def init():
     try:
-        with open("config.json","r") as f:
+        global conectionDb
+        with open("./config/config.json","r") as f:
             config = json.load(f)
-            return ConexionDB(**config['DB_CONFIG'])
+        conectionDb = ConexionDB(**config['DB_CONFIG'])
     except Exception as e:
         print(e)
