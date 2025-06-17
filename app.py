@@ -1,7 +1,7 @@
 import os,uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import login_routes
+from routers import usuario, auth
 import utils.conection_db as conection_db
 import utils.api_logger as apiLogger
 import utils.api_telegram as apiTelegram
@@ -18,7 +18,8 @@ apiTelegram.init()
 apiLogger.init()
 conection_db.init()
 
-app.include_router(login_routes.router)
+app.include_router(usuario.router)
+app.include_router(auth.router)
 
 #para crear el ejecutable del servidor
 '''
