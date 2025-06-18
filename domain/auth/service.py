@@ -29,15 +29,18 @@ def sign_in(cred: SignIn):
 
 def change_pass(user_info:SingInChangePassword):
     print(user_info.correo,user_info.newcontrasenia,user_info.contrasenia)
-    if userRepository.validar_coneccion():
-        find_user = userRepository.findByUsernameEmail(user_info.correo)
-        if find_user and find_user['idusuario']==user_info.id :
-            if bcrypt.checkpw(user_info.contrasenia.encode('utf-8'),find_user['contrasenia'].encode('utf-8')):
-                hashed_password = bcrypt.hashpw(user_info.newcontrasenia.encode('utf-8'), bcrypt.gensalt())
-                if userRepository.changePasswordUser({'id':find_user['idusuario','contrasenia':hashed_password]}):
-                    return {'ok':'Cambio correcto'}
-                else:
-                    raise ErrorGeneral(detail="Algo salio mal, reintente nuevamente")
-        raise ErrorGeneral(detail="Datos incorrectos...")
-    else:
-        raise DatabaseError(detail="Problemas con la base de datos")
+    try:
+        if userRepository.validar_coneccion():
+            find_user = userRepository.findByUsernameEmail('',user_info.correo)
+            if find_user and find_user['idusuario']==user_info.id :
+                if bcrypt.checkpw(user_info.contrasenia.encode('utf-8'),find_user['contrasenia'].encode('utf-8')):
+                    hashed_password = bcrypt.hashpw(user_info.newcontrasenia.encode('utf-8'), bcrypt.gensalt())
+                    if userRepository.changePasswordUser({'id':find_user['idusuario'],'contrasenia':hashed_password}):
+                        return {'ok':'Cambio correcto'}
+                    else:
+                        raise ErrorGeneral(detail="Algo salio mal, reintente nuevamente")
+            raise ErrorGeneral(detail="Datos incorrectos...")
+        else:
+            raise DatabaseError(detail="Problemas con la base de datos")
+    except Exception as error:
+        raise ErrorGeneral(detail=str(error))

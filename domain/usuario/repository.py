@@ -31,9 +31,10 @@ def findByUsernameEmail(username: str, email: str):
     conn.db.close()
     return found
 def changePasswordUser(datos):
+    print(datos)
     sql = "update usuario set contrasenia=%s where idusuario=%s"
     conn.db.open()
-    conn.db.cursor.execute(sql,(datos['contrasenia'],datos['idusuario']))
+    conn.db.cursor.execute(sql,(datos['contrasenia'],datos['id']))
     conn.db.session.commit()
     if conn.db.cursor.rowcount > 0 :
         conn.db.close()
