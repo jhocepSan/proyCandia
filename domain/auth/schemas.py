@@ -12,3 +12,9 @@ class SignInResponse(BaseModel):
     access_token: str
     expiration: datetime
     user_info: Usuario
+
+class SingInChangePassword(BaseModel):
+    id:int
+    correo:str
+    contrasenia:str
+    newcontrasenia:str

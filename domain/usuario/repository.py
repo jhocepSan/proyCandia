@@ -3,6 +3,12 @@ import utils.conection_db as conn
 from fastapi.responses import JSONResponse
 import json
 
+def validar_coneccion():
+    conn.db.open()
+    conn.db.cursor.execute("select now()")
+    res = conn.db.cursor.fetchall()
+    conn.db.close()
+    return res
 
 def get_all(skip: int = 0, limit: int = 100):
 
@@ -24,7 +30,18 @@ def findByUsernameEmail(username: str, email: str):
         found = conn.db.cursor.fetchone()
     conn.db.close()
     return found
-
+def changePasswordUser(datos):
+    sql = "update usuario set contrasenia=%s where idusuario=%s"
+    conn.db.open()
+    conn.db.cursor.execute(sql,(datos['contrasenia'],datos['idusuario']))
+    conn.db.session.commit()
+    if conn.db.cursor.rowcount > 0 :
+        conn.db.close()
+        return True
+    else:
+        conn.db.close()
+        return False
+    
 def add(usuario: UsuarioCreate):
     conn.db.open()
     conn.db.cursor.execute("INSERT INTO usuario (nameusuario, correo, tipo, usoapp, contrasenia) VALUES (%s, %s, %s, %s, %s)", 
