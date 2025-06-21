@@ -1,0 +1,11 @@
+### crear persona
+GET	http://127.0.0.1:8000/persona
+content-type: application/json
+
+{
+  "nombres": "juan",
+  "apellidos": "perez",
+  "direccion": "av prueba km 4",
+  "telefono": "77777",
+  "codigo": "1234"
+}
