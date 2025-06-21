@@ -1,10 +1,35 @@
-POST http://192.168.1.9:4001/usuario/singin HTTP/1.1
+### crear un usuario
+POST http://192.168.1.6:4001/usuario HTTP/1.1
 content-type: application/json
 
 {
-    "id":1
+    "nombre":"jjchsan",
+    "correo":"jjchsan@gmail.com",
+    "tipo":"A",
+    "app":"T",
+    "contrasenia":"6001Sajhy"
 }
 
 ### listar usuarios
 
-GET http://192.168.1.9:4001/usuario/getUsuarios HTTP/1.1
+GET http://192.168.1.9:4001/usuario HTTP/1.1
+
+### iniciar session de usuario
+POST http://192.168.1.9:4001/auth/signin HTTP/1.1
+content-type: application/json
+
+{
+    "usuario":"jjchsan",
+    "contrasena":"6001Sajhy"
+}
+
+### cambiar contraseña del usuario
+POST http://192.168.1.9:4001/auth/changepass HTTP/1.1
+content-type: application/json
+
+{
+    "id":1,
+    "correo":"jjchsan@gmail.com",
+    "contrasena":"6001Sajhy",
+    "newcontrasenia":"Sajhy##"
+}
