@@ -12,8 +12,10 @@ router = APIRouter(
 
 @router.get("")
 async def get_usuarios():
-    return service.get_usuarios()
+    result =  service.get_usuarios()
+    return JSONResponse(status_code=200, content=result)
 
 @router.post("")
 async def crear_usuario(nuevo_usuario: UsuarioCreate):
-    return service.crear_usuario(nuevo_usuario)
+    result = service.crear_usuario(nuevo_usuario) 
+    return JSONResponse(status_code=200, content=result)
