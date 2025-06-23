@@ -12,8 +12,7 @@ def validar_coneccion_db():
 
 def crear_persona(data: PersonaCreate) -> Persona:
     if validar_coneccion_db():
-        #found = repository.find_by_codigo(data.codigo)
-        found = None
+        found = repository.find_by_codigo(data.codigo)
         if found:
             raise DuplicatedError(detail="La persona ya existe")
         persona = repository.add(data)
