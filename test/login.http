@@ -20,7 +20,7 @@ content-type: application/json
 
 {
     "usuario":"jjchsan",
-    "contrasena":"6001Sajhy"
+    "contrasena":"Sajhy##"
 }
 
 ### cambiar contraseña del usuario
@@ -30,6 +30,6 @@ content-type: application/json
 {
     "id":1,
     "correo":"jjchsan@gmail.com",
-    "contrasena":"6001Sajhy",
+    "contrasenia":"6001Sajhy",
     "newcontrasenia":"Sajhy##"
 }

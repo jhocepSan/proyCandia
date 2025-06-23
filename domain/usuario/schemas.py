@@ -12,9 +12,21 @@ class UsuarioCreate(BaseModel):
     app: Optional[str]
     contrasenia: str
 
+class UpdateUser(BaseModel):
+    id:int
+    nombre: Optional[str]
+    correo:str
+    tipo:Optional[str]
+    app:Optional[str]
 
 class Usuario(UsuarioBase):
     nombre: str
     correo: str
     tipo: Optional[str]
     app: Optional[str]
+    nametipo:Optional[str]
+    nameapp:Optional[str]
+    nameestado:Optional[str]
+
+class ChangeEstadoUser(UsuarioBase):
+    estado :str

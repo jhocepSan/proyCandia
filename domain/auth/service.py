@@ -16,17 +16,19 @@ def create_access_token(subject: dict, expires_delta: timedelta = None) -> str:
             confT = json.load(f)
         expire = datetime.utcnow() + timedelta(minutes=confT['ACCESS_TOKEN_EXPIRE_MINUTES'])
     payload = {"exp": expire, **subject}
-    encoded_jwt = jwt.encode(payload, '', algorithm='HS256')
+    encoded_jwt = jwt.encode(payload, 'jj@ch', algorithm='HS256')
     return encoded_jwt
 
 def sign_in(cred: SignIn):
-    find_user = userRepository.findByUsernameEmail(cred.usuario, cred.usuario)    
-    if find_user and bcrypt.checkpw(cred.contrasena.encode('utf-8'), find_user['contrasenia'].encode('utf-8')):
-        token = create_access_token({'id': find_user['idusuario'], 'nombre': cred.usuario})
-        return {'ok':token}
+    if userRepository.validar_coneccion():
+        find_user = userRepository.findByUsernameEmail(cred.usuario, cred.usuario)    
+        if find_user and bcrypt.checkpw(cred.contrasena.encode('utf-8'), find_user['contrasenia'].encode('utf-8')):
+            token = create_access_token({'id': find_user['idusuario'], 'nombre': cred.usuario,'tipo':find_user['tipo'],'app':find_user['usoapp']})
+            return {'ok':token}
+        else:
+            raise AuthError(detail="Credenciales Invalidos")
     else:
-        raise AuthError(detail="Credenciales Invalidos")
-
+        raise DatabaseError(detail="Problemas con la Base de Datos")
 def change_pass(user_info:SingInChangePassword):
     print(user_info.correo,user_info.newcontrasenia,user_info.contrasenia)
     try:
@@ -41,6 +43,6 @@ def change_pass(user_info:SingInChangePassword):
                         raise ErrorGeneral(detail="Algo salio mal, reintente nuevamente")
             raise ErrorGeneral(detail="Datos incorrectos...")
         else:
-            raise DatabaseError(detail="Problemas con la base de datos")
+            raise DatabaseError(detail="Problemas con la Base de Datos")
     except Exception as error:
         raise ErrorGeneral(detail=str(error))
