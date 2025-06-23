@@ -1,6 +1,5 @@
 from fastapi import HTTPException, status
-import bcrypt
-from utils.exceptions import DuplicatedError
+from utils.exceptions import DuplicatedError, DatabaseError
 from . import repository
 from .schemas import Persona, PersonaCreate
 
@@ -13,8 +12,7 @@ def validar_coneccion_db():
 
 def crear_persona(data: PersonaCreate) -> Persona:
     if validar_coneccion_db():
-        #found = repository.find_by_codigo(data.codigo)
-        found = None
+        found = repository.find_by_codigo(data.codigo)
         if found:
             raise DuplicatedError(detail="La persona ya existe")
         persona = repository.add(data)
@@ -31,8 +29,7 @@ def crear_persona(data: PersonaCreate) -> Persona:
                           codigo=persona['codigo']).model_dump()
         return {"ok": persona}
     else:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                            detail="Problemas con la base de datos")
+        raise DatabaseError(detail="Problemas con la base de datos")
 
 def get_all(skip: int = 0, limit: int = 100):
     if validar_coneccion_db():
@@ -50,8 +47,4 @@ def get_all(skip: int = 0, limit: int = 100):
                           codigo=data['codigo']).model_dump() for data in rows] if rows else []  
         return {'ok': lista}
     else:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                            detail="Problemas con la base de datos")
-    
-
-
+        raise DatabaseError(detail="Problemas con la base de datos")
