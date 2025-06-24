@@ -1,7 +1,7 @@
 import os,uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import usuario, auth, persona
+from routers import usuario, auth, persona, vehiculo
 import utils.conection_db as conection_db
 import utils.api_logger as apiLogger
 import utils.api_telegram as apiTelegram
@@ -18,6 +18,7 @@ apiTelegram.init()
 apiLogger.init()
 conection_db.init()
 
+app.include_router(vehiculo.router)
 app.include_router(persona.router)
 app.include_router(usuario.router)
 app.include_router(auth.router)
