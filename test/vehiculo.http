@@ -1,0 +1,15 @@
+### crear persona
+POST	http://127.0.0.1:8000/vehiculo
+content-type: application/json
+
+{
+  "modelo": "1999",
+  "placa": "254-po",
+  "color": "negro",
+  "tipoId": 0,
+  "tipoNombre": "",
+  "motor": "string",
+  "km": "string",
+  "fotoplaca": "string",
+  "foto": "string"
+}
