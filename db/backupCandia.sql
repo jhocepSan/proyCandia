@@ -26,14 +26,15 @@ CREATE TABLE IF NOT EXISTS `persona` (
   `nombres` varchar(45) NOT NULL,
   `apellidos` varchar(45) NOT NULL,
   `direccion` text,
-  `telefono` int unsigned DEFAULT NULL,
+  `telefono` varchar(10) DEFAULT NULL,
   `foto` text,
   `idusuario` int NOT NULL DEFAULT '-1',
   `estado` varchar(1) DEFAULT 'A' COMMENT 'A = ACTIVO\\nE = ELIMINADO\\nI = INACTIVO',
   `tipo` varchar(1) DEFAULT 'U',
   `fecha` datetime DEFAULT CURRENT_TIMESTAMP,
   `codigo` varchar(10) DEFAULT NULL,
-  PRIMARY KEY (`idpersona`)
+  PRIMARY KEY (`idpersona`),
+  UNIQUE (`codigo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- La exportación de datos fue deseleccionada.

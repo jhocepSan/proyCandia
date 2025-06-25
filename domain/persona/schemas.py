@@ -10,7 +10,7 @@ class PersonaCreate(BaseModel):
     nombres: str
     apellidos: str
     direccion: Optional[str]
-    telefono: Optional[int]
+    telefono: Optional[str]
     codigo: Optional[str]
 
 
@@ -25,3 +25,6 @@ class Persona(PersonaBase):
     estado: Optional[str]
     tipo: Optional[str]
     fecha: datetime
+
+class CodigoPersona(BaseModel):
+    codigo:str

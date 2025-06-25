@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 from utils.exceptions import DuplicatedError, DatabaseError
 from . import repository
-from .schemas import Persona, PersonaCreate
+from .schemas import Persona, PersonaCreate,CodigoPersona
 
 def validar_coneccion_db():
     try:
@@ -12,8 +12,7 @@ def validar_coneccion_db():
 
 def crear_persona(data: PersonaCreate) -> Persona:
     if validar_coneccion_db():
-        #found = repository.find_by_codigo(data.codigo)
-        found = None
+        found = repository.find_by_codigo(data.codigo)
         if found:
             raise DuplicatedError(detail="La persona ya existe")
         persona = repository.add(data)
@@ -47,5 +46,13 @@ def get_all(skip: int = 0, limit: int = 100):
                           fecha=data['fecha'], 
                           codigo=data['codigo']).model_dump() for data in rows] if rows else []  
         return {'ok': lista}
+    else:
+        raise DatabaseError(detail="Problemas con la base de datos")
+
+def buscar_codigo_persona(codigo: CodigoPersona)-> Persona:
+    if validar_coneccion_db():
+        result = repository.find_by_codigo(codigo.codigo)
+        print(result)
+        return {'ok':result}
     else:
         raise DatabaseError(detail="Problemas con la base de datos")
