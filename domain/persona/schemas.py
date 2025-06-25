@@ -25,3 +25,6 @@ class Persona(PersonaBase):
     estado: Optional[str]
     tipo: Optional[str]
     fecha: datetime
+
+class CodigoPersona(BaseModel):
+    codigo:str
