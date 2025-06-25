@@ -16,6 +16,14 @@ def get_all(skip: int = 0, limit: int = 100):
     conn.db.close()
     return res
 
+def get_tipoVehiculos():
+    """recupera tipo de vehiculos activos"""
+    conn.db.open()
+    conn.db.cursor.execute("SELECT * FROM tipovehiculo WHERE estado='A'")
+    res = conn.db.cursor.fetchall()
+    conn.db.close()
+    return res
+
 def get_tipoVehiculo_byId(id: int):
     conn.db.open()
     conn.db.cursor.execute("SELECT * FROM tipovehiculo where idtipovehiculo={id}")
@@ -47,7 +55,7 @@ def add(data: VehiculoCreate):
 def add_tipoVehiculo(data):
     query = "insert into tipovehiculo (nombre) values (%s)"
     conn.db.open()
-    conn.db.cursor.execute(query, (data))
+    conn.db.cursor.execute(query, (data,))
     conn.db.session.commit()
     idtipo = conn.db.cursor.lastrowid
     

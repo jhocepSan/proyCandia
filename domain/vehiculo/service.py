@@ -14,7 +14,6 @@ def validar_coneccion_db():
 def crear_vehiculo(data: VehiculoCreate) -> Vehiculo:
     if validar_coneccion_db():
         tipoVehiculo = None
-        data.tipoId = None
         found = repository.find_by_placa(data.placa)
         if found:
             raise DuplicatedError(detail="El vehiculo ya existe")
@@ -61,3 +60,12 @@ def get_all(skip: int = 0, limit: int = 100):
         return res
     else:
         raise DatabaseError(detail="Problemas con la base de datos")
+
+def get_tipoVehiculos():
+    if validar_coneccion_db():
+        rows = repository.get_tipoVehiculos()
+        lista = [TipoVehiculo(id=data['idtipovehiculo'], nombre=data['nombre'], estado=data['estado']).model_dump() for data in rows] if rows else []  
+        return lista
+    else:
+        raise DatabaseError(detail="Problemas con la base de datos")
+
