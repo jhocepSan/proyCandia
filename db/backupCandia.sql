@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `persona` (
   `fecha` datetime DEFAULT CURRENT_TIMESTAMP,
   `codigo` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`idpersona`),
-  UNIQUE (`codigo`)
+  CONSTRAINT codigo UNIQUE (`codigo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- La exportación de datos fue deseleccionada.
@@ -62,7 +62,12 @@ CREATE TABLE IF NOT EXISTS `servicio` (
   `hingreso` datetime DEFAULT NULL,
   `hsalida` datetime DEFAULT NULL,
   `idpersona` int NOT NULL,
-  PRIMARY KEY (`idservicio`)
+  `idvehiculo`  int unsigned not null,
+  PRIMARY KEY (`idservicio`),
+  constraint servicio_persona_idpersona_fk
+      foreign key (idpersona) references candiacar.persona (idpersona),
+  constraint servicio_vehiculo_idvehiculo_fk
+      foreign key (idvehiculo) references candiacar.vehiculo (idvehiculo)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- La exportación de datos fue deseleccionada.
@@ -101,14 +106,15 @@ CREATE TABLE IF NOT EXISTS `vehiculo` (
   `modelo` varchar(10) DEFAULT NULL,
   `placa` varchar(10) DEFAULT NULL,
   `color` varchar(10) DEFAULT NULL,
-  `fecha` datetime DEFAULT NULL,
+  `fecha` datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
   `idtipo` int DEFAULT NULL,
   `motor` varchar(45) DEFAULT NULL,
   `km` varchar(45) DEFAULT NULL,
   `fotoplaca` text,
   `foto` text,
-  `idservicio` int NOT NULL,
-  PRIMARY KEY (`idvehiculo`)
+  PRIMARY KEY (`idvehiculo`),
+  CONSTRAINT placa UNIQUE (placa),
+  CONSTRAINT vehiculo_tipovehiculo_idtipovehiculo_fk foreign key (idtipo) references candiacar.tipovehiculo (idtipovehiculo)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- La exportación de datos fue deseleccionada.
