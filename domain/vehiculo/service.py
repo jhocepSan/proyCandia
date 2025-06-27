@@ -1,8 +1,7 @@
 from fastapi import HTTPException, status
-from utils.exceptions import DuplicatedError, DatabaseError
+from utils.exceptions import DuplicatedError, DatabaseError, ErrorGeneral
 from . import repository
-from .schemas import Vehiculo, VehiculoCreate, TipoVehiculo
-from utils.ApiResponse import ApiResponse
+from .schemas import Vehiculo, VehiculoCreate, TipoVehiculo, VehiculoUpdate
 
 def validar_coneccion_db():
     try:
@@ -13,21 +12,18 @@ def validar_coneccion_db():
 
 def crear_vehiculo(data: VehiculoCreate) -> Vehiculo:
     if validar_coneccion_db():
-        tipoVehiculo = None
         found = repository.find_by_placa(data.placa)
         if found:
             raise DuplicatedError(detail="El vehiculo ya existe")
-        if data.tipoNombre and (data.tipoId == 0 or data.tipoId == None):
-            tipoVehiculo = repository.add_tipoVehiculo(data.tipoNombre)
-            tipoVehiculo = TipoVehiculo(id=tipoVehiculo['idtipovehiculo'], nombre=tipoVehiculo['nombre'], estado=tipoVehiculo['estado'])
-            data.tipoId = tipoVehiculo.id
+        tipo_vehiculo =handle_tipovehiculo(data.tipoId, data.tipoNombre)
+        data.tipoId = tipo_vehiculo.id if tipo_vehiculo else None
 
         vehiculo = repository.add(data)
         vehiculo = Vehiculo(id=vehiculo['idvehiculo'], 
                           modelo=vehiculo['modelo'], 
                           placa=vehiculo['placa'], 
                           color=vehiculo['color'],
-                          tipo=tipoVehiculo,
+                          tipo=tipo_vehiculo,
                           motor=vehiculo['motor'],
                           km=vehiculo['km'],
                           fotoplaca=vehiculo['fotoplaca'], 
@@ -66,6 +62,29 @@ def get_tipoVehiculos():
         rows = repository.get_tipoVehiculos()
         lista = [TipoVehiculo(id=data['idtipovehiculo'], nombre=data['nombre'], estado=data['estado']).model_dump() for data in rows] if rows else []  
         return lista
+    else:
+        raise DatabaseError(detail="Problemas con la base de datos")
+def handle_tipovehiculo(tipo_id: int=None, nombre: str=None) -> TipoVehiculo|None:
+    res = None
+    if nombre and (tipo_id == 0 or tipo_id is None):
+        res = repository.add_tipoVehiculo(nombre)
+    if tipo_id and tipo_id > 0:
+        res = repository.get_tipoVehiculo_byId(tipo_id)
+    if res:
+        res = TipoVehiculo(id=res['idtipovehiculo'], nombre=res['nombre'],
+                                    estado=res['estado'])
+    return res
+
+def update_vehiculo(vehiculo: VehiculoUpdate) -> bool:
+    if validar_coneccion_db():
+        found = repository.find_by_placa(vehiculo.placa)
+        if found and vehiculo.id != found['idvehiculo']:
+            raise DuplicatedError(detail="El vehiculo con la placa proporcionada ya existe")
+        tipo_vehiculo =handle_tipovehiculo(vehiculo.tipoId, vehiculo.tipoNombre)
+        vehiculo.tipoId = tipo_vehiculo.id if tipo_vehiculo else None
+        res = repository.update(vehiculo)
+        if res == False:
+            raise 
     else:
         raise DatabaseError(detail="Problemas con la base de datos")
 
