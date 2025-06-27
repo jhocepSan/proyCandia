@@ -22,6 +22,17 @@ class VehiculoCreate(BaseModel):
     fotoplaca: Optional[str]
     foto: Optional[str]
 
+class VehiculoUpdate(VehiculoBase):
+    modelo: Optional[str] = None
+    placa: str
+    color: Optional[str] = None
+    tipoId: Optional[int]
+    tipoNombre: Optional[str] = None
+    motor: Optional[str] = None
+    km: Optional[str] = None
+    fotoplaca: Optional[str] = None
+    foto: Optional[str] = None
+
 
 class Vehiculo(VehiculoBase):
     modelo: Optional[str]

@@ -1,4 +1,4 @@
-### crear persona
+### crear vehiculo
 POST	http://127.0.0.1:8000/vehiculo
 content-type: application/json
 
@@ -8,8 +8,28 @@ content-type: application/json
   "color": "negro",
   "tipoId": 0,
   "tipoNombre": "",
-  "motor": "string",
-  "km": "string",
-  "fotoplaca": "string",
-  "foto": "string"
+  "motor": null,
+  "km": null,
+  "fotoplaca": null,
+  "foto": null
 }
+### actualizar vehiculo
+PUT	http://127.0.0.1:8000/vehiculo
+content-type: application/json
+
+{
+  "id": 2,
+  "modelo": "1999",
+  "placa": "254-poL",
+  "color": "negro",
+  "tipoId": 0,
+  "tipoNombre": "",
+  "motor": null,
+  "km": null,
+  "fotoplaca": null,
+  "foto": null
+}
+
+{"id": null,
+ "modelo": "2003", "placa: "1993-lui", "color": "plomo", "tipoId": 1, "tipoNombre": "Chevrolet Sonic", "motor": "", "km": "''", "fotoplaca": "testcar.jpg", 'foto': ""}
+ 

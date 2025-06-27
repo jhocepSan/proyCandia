@@ -1,4 +1,4 @@
-from .schemas import Vehiculo, VehiculoCreate
+from .schemas import Vehiculo, VehiculoCreate, VehiculoUpdate
 import utils.conection_db as conn
 from fastapi.responses import JSONResponse
 
@@ -26,7 +26,7 @@ def get_tipoVehiculos():
 
 def get_tipoVehiculo_byId(id: int):
     conn.db.open()
-    conn.db.cursor.execute("SELECT * FROM tipovehiculo where idtipovehiculo={id}")
+    conn.db.cursor.execute(f"SELECT * FROM tipovehiculo where idtipovehiculo={id}")
     res = conn.db.cursor.fetchone()
     conn.db.close()
     return res
@@ -64,3 +64,13 @@ def add_tipoVehiculo(data):
     found = conn.db.cursor.fetchone()
     conn.db.close()
     return found
+
+def update(vehiculo: VehiculoUpdate):
+    conn.db.open()
+    query = f"update vehiculo set modelo=%s, placa=%s, color=%s, idtipo=%s, motor=%s, km=%s, fotoplaca=%s, foto=%s where idvehiculo={vehiculo.id}"
+    conn.db.cursor.execute(query,
+                           (vehiculo.modelo, vehiculo.placa, vehiculo.color, vehiculo.tipoId, vehiculo.motor, vehiculo.km, vehiculo.fotoplaca, vehiculo.foto))
+    conn.db.session.commit()
+    res = True if conn.db.cursor.rowcount > 0 else False
+    conn.db.close()
+    return res
