@@ -20,7 +20,7 @@ class UpdateUser(BaseModel):
     app:Optional[str]
 
 class Usuario(UsuarioBase):
-    nombre: str
+    nombre: Optional[str]
     correo: str
     tipo: Optional[str]
     app: Optional[str]

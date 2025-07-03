@@ -1,5 +1,5 @@
 from domain.vehiculo import service
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Request, Depends, Query
 from fastapi.responses import JSONResponse
 from utils import api_logger, api_telegram
 from domain.vehiculo.schemas import VehiculoCreate, Vehiculo, TipoVehiculo, VehiculoUpdate
@@ -24,3 +24,7 @@ async def getTipos() -> list[TipoVehiculo]:
 @router.put("")
 async def put(data: VehiculoUpdate):
     return service.update_vehiculo(data)
+
+@router.get("/")
+async def find(placa: str = Query(min_length=1, max_length=10)) -> Vehiculo:
+    return service.find_byPlaca(placa)
