@@ -1,5 +1,5 @@
 from fastapi import HTTPException, status
-from utils.exceptions import DuplicatedError, DatabaseError, ErrorGeneral
+from utils.exceptions import DuplicatedError, DatabaseError, ErrorGeneral, NotFoundError
 from . import repository
 from .schemas import Vehiculo, VehiculoCreate, TipoVehiculo, VehiculoUpdate
 
@@ -54,6 +54,30 @@ def get_all(skip: int = 0, limit: int = 100):
                           fecha=data['fecha']).model_dump())
         
         return res
+    else:
+        raise DatabaseError(detail="Problemas con la base de datos")
+
+def find_byPlaca(data: str=None):
+    if validar_coneccion_db():
+        res = repository.find_by_placa(data)
+        if res:
+            tipoVehiculo = None
+            if res['idtipo'] and res['idtipo'] > 0:
+                tipoVehiculo = repository.get_tipoVehiculo_byId(res['idtipo'])
+                tipoVehiculo = TipoVehiculo(id=tipoVehiculo['idtipovehiculo'], nombre=tipoVehiculo['nombre'], estado=tipoVehiculo['estado'])
+            res = Vehiculo(id=res['idvehiculo'], 
+                            modelo=res['modelo'], 
+                            placa=res['placa'], 
+                            color=res['color'],
+                            tipo=tipoVehiculo,
+                            motor=res['motor'],
+                            km=res['km'],
+                            fotoplaca=res['fotoplaca'], 
+                            foto=res['foto'], 
+                            fecha=res['fecha']).model_dump()        
+            return res
+        else:
+            raise NotFoundError("El vehiculo no existe")
     else:
         raise DatabaseError(detail="Problemas con la base de datos")
 

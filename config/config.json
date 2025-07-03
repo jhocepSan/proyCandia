@@ -3,7 +3,7 @@
         "POOL_NAME":"cardb",
         "POOL_SIZE":10,
         "HOST":"localhost",
-        "USER":"root",
+        "USER":"mviza",
         "PASSWORD":"mvizaguido",
         "DATABASE":"candiacar",
         "PORT":3306

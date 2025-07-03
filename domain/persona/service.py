@@ -53,6 +53,6 @@ def buscar_codigo_persona(codigo: CodigoPersona)-> Persona:
     if validar_coneccion_db():
         result = repository.find_by_codigo(codigo.codigo)
         print(result)
-        return {'ok':result}
+        return result
     else:
         raise DatabaseError(detail="Problemas con la base de datos")
