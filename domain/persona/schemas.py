@@ -28,3 +28,6 @@ class Persona(PersonaBase):
 
 class CodigoPersona(BaseModel):
     codigo:str
+
+class ChangeEstadoPerson(PersonaBase):
+    estado:str

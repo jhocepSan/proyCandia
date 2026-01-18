@@ -24,6 +24,7 @@ class Usuario(UsuarioBase):
     correo: str
     tipo: Optional[str]
     app: Optional[str]
+    estado:Optional[str]
     nametipo:Optional[str]
     nameapp:Optional[str]
     nameestado:Optional[str]

@@ -3,11 +3,12 @@
         "POOL_NAME":"cardb",
         "POOL_SIZE":10,
         "HOST":"localhost",
-        "USER":"mviza",
+        "USER":"root",
         "PASSWORD":"mvizaguido",
         "DATABASE":"candiacar",
         "PORT":3306
     },
     "KEY_TELEGRAM":"6173756130:AAFE-CvigWH0s6V_iqLAK3LQ2hWmJtyAX-w",
-    "ACCESS_TOKEN_EXPIRE_MINUTES": 180
+    "ACCESS_TOKEN_EXPIRE_MINUTES": 180,
+    "MODO":"DEV"
 }

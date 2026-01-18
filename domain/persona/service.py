@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
-from utils.exceptions import DuplicatedError, DatabaseError
+from utils.exceptions import DuplicatedError, DatabaseError,ErrorGeneral
 from . import repository
-from .schemas import Persona, PersonaCreate,CodigoPersona
+from .schemas import Persona, PersonaCreate,CodigoPersona,ChangeEstadoPerson
 
 def validar_coneccion_db():
     try:
@@ -55,4 +55,14 @@ def buscar_codigo_persona(codigo: CodigoPersona)-> Persona:
         print(result)
         return result
     else:
+        raise DatabaseError(detail="Problemas con la base de datos")
+
+def change_estado_persona(persona:ChangeEstadoPerson ):
+    if validar_coneccion_db():
+        result = repository.change_estado_persona(persona)
+        if 'ok' in result:
+            return result
+        else:
+            raise ErrorGeneral(detail=result['error'])
+    else:   
         raise DatabaseError(detail="Problemas con la base de datos")

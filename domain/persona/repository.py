@@ -1,4 +1,4 @@
-from .schemas import PersonaCreate, Persona
+from .schemas import PersonaCreate, Persona,ChangeEstadoPerson
 import utils.conection_db as conn
 from fastapi.responses import JSONResponse
 import json
@@ -13,7 +13,7 @@ def validar_coneccion():
 def get_all(skip: int = 0, limit: int = 100):
 
     conn.db.open()
-    conn.db.cursor.execute("SELECT * FROM persona where estado='A'")
+    conn.db.cursor.execute("SELECT * FROM persona where estado<>'E'")
     res = conn.db.cursor.fetchall()
     conn.db.close()
     return res
@@ -42,4 +42,20 @@ def add(data: PersonaCreate):
     found = conn.db.cursor.fetchone()
     conn.db.close()
     return found
+
+def change_estado_persona(data:ChangeEstadoPerson):
+    try:
+        query = "update persona set estado=%s where idpersona=%s"
+        conn.db.open()
+        conn.db.cursor.execute(query,(data.estado,data.idpersona))
+        conn.db.session.commit()
+        if conn.db.cursor.rowcount > 0 :
+            conn.db.close()
+            return {'ok':'Actualizacion de estado Correcto'}
+        else:
+            conn.db.close()
+            return {'error':"No se cambio el estado del cliente"}
+    except Exception as error:
+        print(error)
+        return {'error':str(error)}
     

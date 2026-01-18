@@ -36,6 +36,7 @@ def get_usuarios(skip: int = 0, limit: int = 100):
                 correo=data['correo'],
                 tipo=data['tipo'],
                 app=data['usoapp'],
+                estado=data['estado'],
                 nameapp=data['name_usoapp'],
                 nametipo=data['name_tipo'],
                 nameestado=data['name_estado']).model_dump() for data in rows] if rows else []  
